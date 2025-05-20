@@ -45,3 +45,90 @@
     **In theory** `PATCH /users/1` updates the old user with the payload
 
 - Let's imagine we have this user
+
+ ```json
+        {
+            "id": 1,
+            "name": "John",
+            "role": "User"
+        }
+        ```
+
+- **in theory** `PUT /users/1` with payload `{ id:1, role: "Admin" }`
+        - The payload replaces the existing user
+        - We would be left with only `{ id:1, role: "Admin" }` without name
+        - We probably should not allow the ID to change...
+
+- **in theory** `PATCH /users/1` with payload `{ id:1, role: "Admin" }`
+        - We look at the existing data and update the changed values
+        - We would be left with `{ id:1, name: "John", role: "Admin" }` 
+
+- In practice, this is not always so straightforward
+    - Sometimes PUT actually does what PATCH should
+    - Sometimes just the id is unchangeable (as it should be)
+    - Sometimes the request is `PUT /users` with `{ id:1, role: "Admin" }`
+        - The ID is read from the request
+    - The real world is messy
+    - People are messy
+
+- With a large application, you can have hundreds of endpoints
+    - Testing can be very difficult
+    - `curl` is fantastic, but can't do everything
+    - We learn a new tool called Postman for testing our API
+    - It is not the only one, but it is the leading tool for API testing
+
+## REST API theory
+
+- REST: Representational State Transfer
+    - A very, very common system for designing web APIs
+    - Like `jsonplaceholder.typicode.com`
+    - Works well together with the HTTP protocol
+
+- REST APIs use HTTP methods to implement CRUD
+    - Create...POST
+    - Read.....GET
+    - Update...PUT and PATCH
+    - Delete...DELETE
+
+- The method defines what operation to do
+- The URL defines which kind of resource is targeted
+- The headers help describe the request
+- The body is the payload of the request
+    - For example, what to create or update
+
+- The backends we generally build are APIs
+    - Maybe not completely pure REST APIs
+    - But mostly RESTful :)
+    - They grant access to control stored data via endpoints
+
+- Very very commonly APIs respond with the same type of data they take in
+    - We'll also now start to use JSON basically for all data exchange
+
+
+### HTTP Status codes
+
+- What does "Error 404" mean?
+
+- The 404 is an HTTP status code
+    - The HTTP protocol defines a lot of status codes
+    - They are used to communicate the result of a request
+
+- The status code is a number
+    - The first digit defines the general category
+    - The next two digits define the specific status
+
+- Some common status codes:
+    - 200 OK
+    - 201 Created
+    - 204 No Content
+    - 400 Bad Request
+    - 401 Unauthorized
+    - 403 Forbidden
+    - 404 Not Found
+    - 405 Method Not Allowed
+    - 500 Internal Server Error
+
+- Using correct status codes is important
+    - It helps the client understand what happened
+    - It helps the client know what to do next
+    - It's good practice for REST APIs
